@@ -7,19 +7,33 @@ import org.opensearch.gradle.test.RestIntegTestTask
 
 buildscript {
     ext {
-        opensearch_version = System.getProperty("opensearch.version", "2.18.0-SNAPSHOT")
+        opensearch_job_scheduler_version = "2.18.0.0.1.0-SNAPSHOT"
+        build_tools = "2.18.0.0.1.0-SNAPSHOT"
+        opensearch_version = System.getProperty("opensearch.version", "2.18.0.0.1.0-SNAPSHOT")
         isSnapshot = "true" == System.getProperty("build.snapshot", "true")
-        buildVersionQualifier = System.getProperty("build.version_qualifier", "")
     }
 
+    String cldrMavenUrl="http://nexus-private.hortonworks.com/nexus/content/groups/public"
+    String gbnUrl="http://nexus-private.hortonworks.com/nexus/content/groups/public"
+
     repositories {
+        maven {
+            url gbnUrl
+            setAllowInsecureProtocol(true);
+            allowInsecureProtocol=true
+        }
+        maven {
+            url cldrMavenUrl;
+            setAllowInsecureProtocol(true);
+            allowInsecureProtocol = true;
+        }
         mavenLocal()
         mavenCentral()
         maven { url "https://aws.oss.sonatype.org/content/repositories/snapshots" }
     }
 
     dependencies {
-        classpath "org.opensearch.gradle:build-tools:${opensearch_version}"
+        classpath "org.opensearch.gradle:build-tools:${build_tools}"
     }
 }
 
@@ -69,13 +83,7 @@ testClusters.javaRestTest {
 
 allprojects {
     group = 'org.opensearch'
-    version = opensearch_version.tokenize('-')[0] + '.0'
-    if (buildVersionQualifier) {
-        version += "-${buildVersionQualifier}"
-    }
-    if (isSnapshot) {
-        version += "-SNAPSHOT"
-    }
+    version = "${opensearch_job_scheduler_version}"
 
     apply from: "$rootDir/build-tools/repositories.gradle"
 
