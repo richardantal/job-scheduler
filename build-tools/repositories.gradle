@@ -3,6 +3,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+String cldrMavenUrl="http://nexus-private.hortonworks.com/nexus/content/groups/public"
+String gbnUrl="http://nexus-private.hortonworks.com/nexus/content/groups/public"
+
 repositories {
+    maven {
+        url gbnUrl
+        setAllowInsecureProtocol(true);
+        allowInsecureProtocol=true
+    }
+    maven {
+        url cldrMavenUrl;
+        setAllowInsecureProtocol(true);
+        allowInsecureProtocol = true;
+    }
     mavenCentral()
 }
